@@ -18,6 +18,7 @@ import (
 func main() {
 	s := trpc.NewServer()
 	pb.RegisterMovieService(s, &services.MovieImpl{})
+	pb.RegisterUserService(s, &services.UserImpl{})
 	if err := s.Serve(); err != nil {
 		log.Fatal(err)
 	}

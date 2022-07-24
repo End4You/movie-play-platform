@@ -17,6 +17,80 @@ import (
 
 /* ************************************ Service Definition ************************************ */
 
+// UserService defines service
+type UserService interface {
+
+	// CreateUser 用户注册
+	CreateUser(ctx context.Context, req *CreateUserReq, rsp *CreateUserRsp) (err error)
+
+	// CheckUserName 检查用户名重复
+	CheckUserName(ctx context.Context, req *CheckUserNameReq, rsp *CheckUserNameRsp) (err error)
+}
+
+func UserService_CreateUser_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
+
+	req := &CreateUserReq{}
+	filters, err := f(req)
+	if err != nil {
+		return nil, err
+	}
+	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
+		return svr.(UserService).CreateUser(ctx, reqbody.(*CreateUserReq), rspbody.(*CreateUserRsp))
+	}
+
+	rsp := &CreateUserRsp{}
+	err = filters.Handle(ctx, req, rsp, handleFunc)
+	if err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func UserService_CheckUserName_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
+
+	req := &CheckUserNameReq{}
+	filters, err := f(req)
+	if err != nil {
+		return nil, err
+	}
+	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
+		return svr.(UserService).CheckUserName(ctx, reqbody.(*CheckUserNameReq), rspbody.(*CheckUserNameRsp))
+	}
+
+	rsp := &CheckUserNameRsp{}
+	err = filters.Handle(ctx, req, rsp, handleFunc)
+	if err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+// UserServer_ServiceDesc descriptor for server.RegisterService
+var UserServer_ServiceDesc = server.ServiceDesc{
+	ServiceName: "trpc.moviePlay.operation.User",
+	HandlerType: ((*UserService)(nil)),
+	Methods: []server.Method{
+		{
+			Name: "/trpc.moviePlay.operation.User/CreateUser",
+			Func: UserService_CreateUser_Handler,
+		},
+		{
+			Name: "/trpc.moviePlay.operation.User/CheckUserName",
+			Func: UserService_CheckUserName_Handler,
+		},
+	},
+}
+
+// RegisterUserService register service
+func RegisterUserService(s server.Service, svr UserService) {
+	if err := s.Register(&UserServer_ServiceDesc, svr); err != nil {
+		panic(fmt.Sprintf("User register error:%v", err))
+	}
+
+}
+
 // MovieService defines service
 type MovieService interface {
 
@@ -65,6 +139,77 @@ func RegisterMovieService(s server.Service, svr MovieService) {
 }
 
 /* ************************************ Client Definition ************************************ */
+
+// UserClientProxy defines service client proxy
+type UserClientProxy interface {
+
+	// CreateUser 用户注册
+	CreateUser(ctx context.Context, req *CreateUserReq, opts ...client.Option) (rsp *CreateUserRsp, err error)
+
+	// CheckUserName 检查用户名重复
+	CheckUserName(ctx context.Context, req *CheckUserNameReq, opts ...client.Option) (rsp *CheckUserNameRsp, err error)
+}
+
+type UserClientProxyImpl struct {
+	client client.Client
+	opts   []client.Option
+}
+
+var NewUserClientProxy = func(opts ...client.Option) UserClientProxy {
+	return &UserClientProxyImpl{client: client.DefaultClient, opts: opts}
+}
+
+func (c *UserClientProxyImpl) CreateUser(ctx context.Context, req *CreateUserReq, opts ...client.Option) (*CreateUserRsp, error) {
+
+	ctx, msg := codec.WithCloneMessage(ctx)
+	defer codec.PutBackMessage(msg)
+
+	msg.WithClientRPCName("/trpc.moviePlay.operation.User/CreateUser")
+	msg.WithCalleeServiceName(UserServer_ServiceDesc.ServiceName)
+	msg.WithCalleeApp("moviePlay")
+	msg.WithCalleeServer("operation")
+	msg.WithCalleeService("User")
+	msg.WithCalleeMethod("CreateUser")
+	msg.WithSerializationType(codec.SerializationTypePB)
+
+	callopts := make([]client.Option, 0, len(c.opts)+len(opts))
+	callopts = append(callopts, c.opts...)
+	callopts = append(callopts, opts...)
+
+	rsp := &CreateUserRsp{}
+
+	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func (c *UserClientProxyImpl) CheckUserName(ctx context.Context, req *CheckUserNameReq, opts ...client.Option) (*CheckUserNameRsp, error) {
+
+	ctx, msg := codec.WithCloneMessage(ctx)
+	defer codec.PutBackMessage(msg)
+
+	msg.WithClientRPCName("/trpc.moviePlay.operation.User/CheckUserName")
+	msg.WithCalleeServiceName(UserServer_ServiceDesc.ServiceName)
+	msg.WithCalleeApp("moviePlay")
+	msg.WithCalleeServer("operation")
+	msg.WithCalleeService("User")
+	msg.WithCalleeMethod("CheckUserName")
+	msg.WithSerializationType(codec.SerializationTypePB)
+
+	callopts := make([]client.Option, 0, len(c.opts)+len(opts))
+	callopts = append(callopts, c.opts...)
+	callopts = append(callopts, opts...)
+
+	rsp := &CheckUserNameRsp{}
+
+	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
 
 // MovieClientProxy defines service client proxy
 type MovieClientProxy interface {

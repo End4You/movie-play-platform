@@ -1,4 +1,5 @@
 # Logs
+log
 logs
 *.log
 
@@ -13,6 +14,7 @@ build/Release
 
 # Output files
 *.tgz
+movie_opration
 
 # Editor directories and files
 .idea

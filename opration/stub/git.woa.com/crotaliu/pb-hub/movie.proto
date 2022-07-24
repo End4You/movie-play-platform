@@ -4,19 +4,55 @@ package trpc.moviePlay.operation;
 
 option go_package="git.woa.com/crotaliu/pb-hub";
 
+/* 注册服务 */
+// 用户服务
+service User {
+  // 用户注册
+  rpc CreateUser(CreateUserReq) returns (CreateUserRsp) {}
+  // 检查用户名重复
+  rpc CheckUserName(CheckUserNameReq) returns (CheckUserNameRsp) {}
+}
+
+
 // 视频
 service Movie {
   // 获取视频列表
   rpc GetMovieList(GetMovieListReq) returns (GetMovieListRsp) {}
-
 }
 
-// GetMovieListReq 获取视频列表 请求参数
+/* 请求参数 */
+// 用户注册 请求参数
+message CreateUserReq {
+  string userName = 1; // 用户名
+  string password = 2; // 密码
+}
+
+// 检查用户名重复 请求参数
+message CheckUserNameReq {
+  string userName = 1; // 用户名
+}
+
+// 获取视频列表 请求参数
 message GetMovieListReq {
   int32 status = 1; // 视频状态: 0-所有 1-上线 2-下线
 }
 
-// GetMovieListRsp 获取视频列表 响应参数
+/* 响应参数 */
+// 用户注册 响应参数
+message CreateUserRsp {
+  int32   code   = 1;  // 返回码
+  string  msg    = 2;  // 返回信息
+  int32   result = 3;  // 返回结果，0-登录失败 1-登录成功
+}
+
+// 检查用户名重复 响应参数
+message CheckUserNameRsp {
+  int32   code   = 1;  // 返回码
+  string  msg    = 2;  // 返回信息
+  bool    result = 3;  // 返回结果，true-重复 false-不重复
+}
+
+// 获取视频列表 响应参数
 message GetMovieListRsp {
   int32 status = 1;
 }
