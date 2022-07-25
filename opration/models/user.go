@@ -1,7 +1,5 @@
 package models
 
-import "time"
-
 type User struct {
 	// 用户ID，自增ID
 	Uid uint32
@@ -12,7 +10,16 @@ type User struct {
 	// 角色 1-guest 2-user 3-admin
 	Role int8
 	// 创建时间
-	CreateTime time.Time
+	CreateTime int64
 	// 更新时间
-	UpdateTime time.Time
+	UpdateTime int64
+}
+
+type Token struct {
+	// 用户token
+	Token string
+	// 用户名
+	UserName string
+	// 登录时间
+	LoginTime int64
 }

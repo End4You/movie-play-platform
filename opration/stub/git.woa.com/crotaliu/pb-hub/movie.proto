@@ -8,9 +8,11 @@ option go_package="git.woa.com/crotaliu/pb-hub";
 // 用户服务
 service User {
   // 用户注册
-  rpc CreateUser(CreateUserReq) returns (CreateUserRsp) {}
+  rpc Register(RegisterReq) returns (RegisterRsp) {}
   // 检查用户名重复
   rpc CheckUserName(CheckUserNameReq) returns (CheckUserNameRsp) {}
+  // 用户登录
+  rpc Login(LoginReq) returns (LoginRsp) {}
 }
 
 
@@ -22,7 +24,7 @@ service Movie {
 
 /* 请求参数 */
 // 用户注册 请求参数
-message CreateUserReq {
+message RegisterReq {
   string userName = 1; // 用户名
   string password = 2; // 密码
 }
@@ -32,6 +34,12 @@ message CheckUserNameReq {
   string userName = 1; // 用户名
 }
 
+// 用户登录 请求参数
+message LoginReq {
+  string userName = 1; // 用户名
+  string password = 2; // 密码
+}
+
 // 获取视频列表 请求参数
 message GetMovieListReq {
   int32 status = 1; // 视频状态: 0-所有 1-上线 2-下线
@@ -39,17 +47,28 @@ message GetMovieListReq {
 
 /* 响应参数 */
 // 用户注册 响应参数
-message CreateUserRsp {
+message RegisterRsp {
   int32   code   = 1;  // 返回码
   string  msg    = 2;  // 返回信息
-  int32   result = 3;  // 返回结果，0-登录失败 1-登录成功
+  bool    result = 3;  // 返回结果，false-登录失败 true-登录成功
 }
 
 // 检查用户名重复 响应参数
 message CheckUserNameRsp {
   int32   code   = 1;  // 返回码
   string  msg    = 2;  // 返回信息
-  bool    result = 3;  // 返回结果，true-重复 false-不重复
+  bool    result = 3;  // 返回结果，false-不重复 true-重复
+}
+
+// 用户登录 响应参数
+message LoginRsp {
+  message Result {
+    string token      = 1; // 用户 token
+    int64 loginTime  = 2; // 登录时间
+  }
+  int32   code   = 1;  // 返回码
+  string  msg    = 2;  // 返回信息
+  Result  result = 3;  // 返回结果
 }
 
 // 获取视频列表 响应参数

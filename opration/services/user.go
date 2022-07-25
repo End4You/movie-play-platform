@@ -7,12 +7,13 @@ import (
 	"movie_opration/config"
 	"movie_opration/logic"
 	"movie_opration/utils"
+	"time"
 )
 
 type UserImpl struct{}
 
-// CreateUser 用户注册
-func (s *UserImpl) CreateUser(ctx context.Context, req *pb.CreateUserReq, rsp *pb.CreateUserRsp) error {
+// Register 用户注册
+func (s *UserImpl) Register(ctx context.Context, req *pb.RegisterReq, rsp *pb.RegisterRsp) error {
 	// ConnDB 实例
 	db := utils.ConnDB()
 	// 创建用户前判断用户名是否存在
@@ -20,22 +21,22 @@ func (s *UserImpl) CreateUser(ctx context.Context, req *pb.CreateUserReq, rsp *p
 	// 用户名重复时返回错误
 	if result || err != nil {
 		rsp.Code, rsp.Msg = config.InnerOtherError.Code, config.InnerOtherError.Msg
-		rsp.Result = 0
+		rsp.Result = false
 		return nil
 	}
 	// 创建用户逻辑
-	err = logic.CreateUserLogic(db, req.UserName, req.Password)
+	err = logic.RegisterLogic(db, req.UserName, req.Password)
 	// 出错处理
 	if err != nil {
 		log.Errorf("CreateUserLogic 用户注册事件失败：%v", err)
 		rsp.Code, rsp.Msg = config.InnerWriteDbError.Code, config.InnerWriteDbError.Msg
-		rsp.Result = 0
+		rsp.Result = false
 
 		return nil
 	}
 	// 正常返回
 	rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg
-	rsp.Result = 1
+	rsp.Result = true
 
 	return nil
 }
@@ -44,11 +45,11 @@ func (s *UserImpl) CreateUser(ctx context.Context, req *pb.CreateUserReq, rsp *p
 func (s *UserImpl) CheckUserName(ctx context.Context, req *pb.CheckUserNameReq, rsp *pb.CheckUserNameRsp) error {
 	// ConnDB 实例
 	db := utils.ConnDB()
-	// 检查用户名重复通用逻辑
+	// 检查用户名重复逻辑
 	result, err := logic.CheckUserNameLogic(db, req.UserName)
 	// 出错处理
 	if err != nil {
-		log.Errorf("CheckUserName 检查用户名重复事件失败：%v", err)
+		log.Errorf("CheckUserNameLogic 检查用户名重复事件失败：%v", err)
 		rsp.Code, rsp.Msg = config.InnerReadDbError.Code, config.InnerReadDbError.Msg
 		rsp.Result = result
 	}
@@ -59,6 +60,44 @@ func (s *UserImpl) CheckUserName(ctx context.Context, req *pb.CheckUserNameReq, 
 		rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg
 	}
 	rsp.Result = result
+
+	return nil
+}
+
+// Login 用户登录
+func (s *UserImpl) Login(ctx context.Context, req *pb.LoginReq, rsp *pb.LoginRsp) error {
+	// ConnDB 实例
+	db := utils.ConnDB()
+	// 检查密码正确性
+	result, err := logic.CheckPasswordLogic(db, req.UserName, req.Password)
+	if err != nil {
+		log.Errorf("CheckPasswordLogic 检查密码正确性事件失败：%v", err)
+		rsp.Code, rsp.Msg = config.InnerReadDbError.Code, config.InnerReadDbError.Msg
+	}
+	if result { // 密码正确
+		// 生成 token
+		token := utils.GenerateToken(req.UserName)
+		// 删除旧 token
+		err = logic.DeleteTokenLogic(db, req.UserName)
+		if err != nil {
+			log.Errorf("DeleteTokenLogic 删除旧 token 事件失败：%v", err)
+			rsp.Code, rsp.Msg = config.InnerDeleteDbError.Code, config.InnerDeleteDbError.Msg
+		}
+		// 写入新 token
+		err = logic.WriteTokenLogic(db, req.UserName, token)
+		if err != nil {
+			log.Errorf("WriteTokenLogic 写入新 token 事件失败：%v", err)
+			rsp.Code, rsp.Msg = config.InnerWriteDbError.Code, config.InnerWriteDbError.Msg
+		}
+		// 正常返回
+		rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg
+		rsp.Result = &pb.LoginRsp_Result{
+			Token:     token,
+			LoginTime: time.Now().Unix(),
+		}
+	} else { // 密码错误
+		rsp.Code, rsp.Msg = config.ClientLoginError.Code, config.ClientLoginError.Msg
+	}
 
 	return nil
 }

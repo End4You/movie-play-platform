@@ -17,6 +17,7 @@ var (
 	InnerOtherError          = Status{-400, "内部其他问题"}
 	InnerReadDbError         = Status{-401, "读取数据库错误"}
 	InnerWriteDbError        = Status{-402, "写入数据库错误"}
+	InnerDeleteDbError       = Status{-403, "删除数据库错误"}
 	InnerMarshalError        = Status{-427, "数据序列化失败"}
 	InnerUnmarshalError      = Status{-428, "数据反序列化失败"}
 	InnerEncryptError        = Status{-429, "数据加密失败"}
@@ -28,9 +29,11 @@ var (
 	ClientContentError       = Status{300, "客户端请求内容问题"}
 	ClientRecordNotFound     = Status{301, "记录未找到"}
 	ClientCheckUserNameError = Status{302, "用户名重复"}
+	ClientLoginError         = Status{303, "登录失败"}
 	ClientInvalidTimeRange   = Status{320, "时间范围无效"}
 	ClientInvalidParamError  = Status{321, "客户端请求参数校验失败"}
 	ClientExtractTokenError  = Status{326, "解析Token失败"}
+	ClientNoTokenError       = Status{401, "客户端缺少Token"}
 	ClientLoginExpired       = Status{403, "用户登陆过期"}
 )
 

@@ -16,6 +16,7 @@ require (
 	git.code.oa.com/trpc-go/trpc-naming-polaris v0.3.3
 	git.woa.com/crotaliu/pb-hub v0.0.0-00010101000000-000000000000
 	github.com/frankban/quicktest v1.11.3 // indirect
+	github.com/gofrs/uuid v4.0.0+incompatible // indirect
 	github.com/golang/mock v1.6.0
 	github.com/pierrec/lz4 v2.6.0+incompatible // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect

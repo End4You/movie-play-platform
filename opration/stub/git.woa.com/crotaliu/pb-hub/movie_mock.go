@@ -34,18 +34,18 @@ func (m *MockUserService) EXPECT() *MockUserServiceMockRecorder {
 	return m.recorder
 }
 
-// CreateUser mocks base method
-func (m *MockUserService) CreateUser(ctx context.Context, req *CreateUserReq, rsp *CreateUserRsp) error {
+// Register mocks base method
+func (m *MockUserService) Register(ctx context.Context, req *RegisterReq, rsp *RegisterRsp) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateUser", ctx, req, rsp)
+	ret := m.ctrl.Call(m, "Register", ctx, req, rsp)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// CreateUser indicates an expected call of CreateUser
-func (mr *MockUserServiceMockRecorder) CreateUser(ctx, req, rsp interface{}) *gomock.Call {
+// Register indicates an expected call of Register
+func (mr *MockUserServiceMockRecorder) Register(ctx, req, rsp interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockUserService)(nil).CreateUser), ctx, req, rsp)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockUserService)(nil).Register), ctx, req, rsp)
 }
 
 // CheckUserName mocks base method
@@ -60,6 +60,20 @@ func (m *MockUserService) CheckUserName(ctx context.Context, req *CheckUserNameR
 func (mr *MockUserServiceMockRecorder) CheckUserName(ctx, req, rsp interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckUserName", reflect.TypeOf((*MockUserService)(nil).CheckUserName), ctx, req, rsp)
+}
+
+// Login mocks base method
+func (m *MockUserService) Login(ctx context.Context, req *LoginReq, rsp *LoginRsp) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Login", ctx, req, rsp)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Login indicates an expected call of Login
+func (mr *MockUserServiceMockRecorder) Login(ctx, req, rsp interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockUserService)(nil).Login), ctx, req, rsp)
 }
 
 // MockMovieService is a mock of MovieService interface
@@ -122,24 +136,24 @@ func (m *MockUserClientProxy) EXPECT() *MockUserClientProxyMockRecorder {
 	return m.recorder
 }
 
-// CreateUser mocks base method
-func (m *MockUserClientProxy) CreateUser(ctx context.Context, req *CreateUserReq, opts ...client.Option) (*CreateUserRsp, error) {
+// Register mocks base method
+func (m *MockUserClientProxy) Register(ctx context.Context, req *RegisterReq, opts ...client.Option) (*RegisterRsp, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, req}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
-	ret := m.ctrl.Call(m, "CreateUser", varargs...)
-	ret0, _ := ret[0].(*CreateUserRsp)
+	ret := m.ctrl.Call(m, "Register", varargs...)
+	ret0, _ := ret[0].(*RegisterRsp)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CreateUser indicates an expected call of CreateUser
-func (mr *MockUserClientProxyMockRecorder) CreateUser(ctx, req interface{}, opts ...interface{}) *gomock.Call {
+// Register indicates an expected call of Register
+func (mr *MockUserClientProxyMockRecorder) Register(ctx, req interface{}, opts ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{ctx, req}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockUserClientProxy)(nil).CreateUser), varargs...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockUserClientProxy)(nil).Register), varargs...)
 }
 
 // CheckUserName mocks base method
@@ -160,6 +174,26 @@ func (mr *MockUserClientProxyMockRecorder) CheckUserName(ctx, req interface{}, o
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{ctx, req}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckUserName", reflect.TypeOf((*MockUserClientProxy)(nil).CheckUserName), varargs...)
+}
+
+// Login mocks base method
+func (m *MockUserClientProxy) Login(ctx context.Context, req *LoginReq, opts ...client.Option) (*LoginRsp, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, req}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "Login", varargs...)
+	ret0, _ := ret[0].(*LoginRsp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Login indicates an expected call of Login
+func (mr *MockUserClientProxyMockRecorder) Login(ctx, req interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, req}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockUserClientProxy)(nil).Login), varargs...)
 }
 
 // MockMovieClientProxy is a mock of MovieClientProxy interface
