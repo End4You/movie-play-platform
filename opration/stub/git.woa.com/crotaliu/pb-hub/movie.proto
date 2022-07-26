@@ -16,10 +16,10 @@ service User {
 }
 
 
-// 视频
-service Movie {
+// 视频列表
+service List {
   // 获取视频列表
-  rpc GetMovieList(GetMovieListReq) returns (GetMovieListRsp) {}
+  rpc GetList(GetListReq) returns (GetListRsp) {}
 }
 
 /* 请求参数 */
@@ -41,7 +41,7 @@ message LoginReq {
 }
 
 // 获取视频列表 请求参数
-message GetMovieListReq {
+message GetListReq {
   int32 status = 1; // 视频状态: 0-所有 1-上线 2-下线
 }
 
@@ -72,6 +72,6 @@ message LoginRsp {
 }
 
 // 获取视频列表 响应参数
-message GetMovieListRsp {
+message GetListRsp {
   int32 status = 1;
 }

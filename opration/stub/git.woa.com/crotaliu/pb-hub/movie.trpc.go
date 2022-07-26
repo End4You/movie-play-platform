@@ -118,25 +118,25 @@ func RegisterUserService(s server.Service, svr UserService) {
 
 }
 
-// MovieService defines service
-type MovieService interface {
+// ListService defines service
+type ListService interface {
 
-	// GetMovieList 获取视频列表
-	GetMovieList(ctx context.Context, req *GetMovieListReq, rsp *GetMovieListRsp) (err error)
+	// GetList 获取视频列表
+	GetList(ctx context.Context, req *GetListReq, rsp *GetListRsp) (err error)
 }
 
-func MovieService_GetMovieList_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
+func ListService_GetList_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
 
-	req := &GetMovieListReq{}
+	req := &GetListReq{}
 	filters, err := f(req)
 	if err != nil {
 		return nil, err
 	}
 	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
-		return svr.(MovieService).GetMovieList(ctx, reqbody.(*GetMovieListReq), rspbody.(*GetMovieListRsp))
+		return svr.(ListService).GetList(ctx, reqbody.(*GetListReq), rspbody.(*GetListRsp))
 	}
 
-	rsp := &GetMovieListRsp{}
+	rsp := &GetListRsp{}
 	err = filters.Handle(ctx, req, rsp, handleFunc)
 	if err != nil {
 		return nil, err
@@ -145,22 +145,22 @@ func MovieService_GetMovieList_Handler(svr interface{}, ctx context.Context, f s
 	return rsp, nil
 }
 
-// MovieServer_ServiceDesc descriptor for server.RegisterService
-var MovieServer_ServiceDesc = server.ServiceDesc{
-	ServiceName: "trpc.moviePlay.operation.Movie",
-	HandlerType: ((*MovieService)(nil)),
+// ListServer_ServiceDesc descriptor for server.RegisterService
+var ListServer_ServiceDesc = server.ServiceDesc{
+	ServiceName: "trpc.moviePlay.operation.List",
+	HandlerType: ((*ListService)(nil)),
 	Methods: []server.Method{
 		{
-			Name: "/trpc.moviePlay.operation.Movie/GetMovieList",
-			Func: MovieService_GetMovieList_Handler,
+			Name: "/trpc.moviePlay.operation.List/GetList",
+			Func: ListService_GetList_Handler,
 		},
 	},
 }
 
-// RegisterMovieService register service
-func RegisterMovieService(s server.Service, svr MovieService) {
-	if err := s.Register(&MovieServer_ServiceDesc, svr); err != nil {
-		panic(fmt.Sprintf("Movie register error:%v", err))
+// RegisterListService register service
+func RegisterListService(s server.Service, svr ListService) {
+	if err := s.Register(&ListServer_ServiceDesc, svr); err != nil {
+		panic(fmt.Sprintf("List register error:%v", err))
 	}
 
 }
@@ -267,40 +267,40 @@ func (c *UserClientProxyImpl) Login(ctx context.Context, req *LoginReq, opts ...
 	return rsp, nil
 }
 
-// MovieClientProxy defines service client proxy
-type MovieClientProxy interface {
+// ListClientProxy defines service client proxy
+type ListClientProxy interface {
 
-	// GetMovieList 获取视频列表
-	GetMovieList(ctx context.Context, req *GetMovieListReq, opts ...client.Option) (rsp *GetMovieListRsp, err error)
+	// GetList 获取视频列表
+	GetList(ctx context.Context, req *GetListReq, opts ...client.Option) (rsp *GetListRsp, err error)
 }
 
-type MovieClientProxyImpl struct {
+type ListClientProxyImpl struct {
 	client client.Client
 	opts   []client.Option
 }
 
-var NewMovieClientProxy = func(opts ...client.Option) MovieClientProxy {
-	return &MovieClientProxyImpl{client: client.DefaultClient, opts: opts}
+var NewListClientProxy = func(opts ...client.Option) ListClientProxy {
+	return &ListClientProxyImpl{client: client.DefaultClient, opts: opts}
 }
 
-func (c *MovieClientProxyImpl) GetMovieList(ctx context.Context, req *GetMovieListReq, opts ...client.Option) (*GetMovieListRsp, error) {
+func (c *ListClientProxyImpl) GetList(ctx context.Context, req *GetListReq, opts ...client.Option) (*GetListRsp, error) {
 
 	ctx, msg := codec.WithCloneMessage(ctx)
 	defer codec.PutBackMessage(msg)
 
-	msg.WithClientRPCName("/trpc.moviePlay.operation.Movie/GetMovieList")
-	msg.WithCalleeServiceName(MovieServer_ServiceDesc.ServiceName)
+	msg.WithClientRPCName("/trpc.moviePlay.operation.List/GetList")
+	msg.WithCalleeServiceName(ListServer_ServiceDesc.ServiceName)
 	msg.WithCalleeApp("moviePlay")
 	msg.WithCalleeServer("operation")
-	msg.WithCalleeService("Movie")
-	msg.WithCalleeMethod("GetMovieList")
+	msg.WithCalleeService("List")
+	msg.WithCalleeMethod("GetList")
 	msg.WithSerializationType(codec.SerializationTypePB)
 
 	callopts := make([]client.Option, 0, len(c.opts)+len(opts))
 	callopts = append(callopts, c.opts...)
 	callopts = append(callopts, opts...)
 
-	rsp := &GetMovieListRsp{}
+	rsp := &GetListRsp{}
 
 	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
 		return nil, err

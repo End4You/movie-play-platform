@@ -76,41 +76,41 @@ func (mr *MockUserServiceMockRecorder) Login(ctx, req, rsp interface{}) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockUserService)(nil).Login), ctx, req, rsp)
 }
 
-// MockMovieService is a mock of MovieService interface
-type MockMovieService struct {
+// MockListService is a mock of ListService interface
+type MockListService struct {
 	ctrl     *gomock.Controller
-	recorder *MockMovieServiceMockRecorder
+	recorder *MockListServiceMockRecorder
 }
 
-// MockMovieServiceMockRecorder is the mock recorder for MockMovieService
-type MockMovieServiceMockRecorder struct {
-	mock *MockMovieService
+// MockListServiceMockRecorder is the mock recorder for MockListService
+type MockListServiceMockRecorder struct {
+	mock *MockListService
 }
 
-// NewMockMovieService creates a new mock instance
-func NewMockMovieService(ctrl *gomock.Controller) *MockMovieService {
-	mock := &MockMovieService{ctrl: ctrl}
-	mock.recorder = &MockMovieServiceMockRecorder{mock}
+// NewMockListService creates a new mock instance
+func NewMockListService(ctrl *gomock.Controller) *MockListService {
+	mock := &MockListService{ctrl: ctrl}
+	mock.recorder = &MockListServiceMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use
-func (m *MockMovieService) EXPECT() *MockMovieServiceMockRecorder {
+func (m *MockListService) EXPECT() *MockListServiceMockRecorder {
 	return m.recorder
 }
 
-// GetMovieList mocks base method
-func (m *MockMovieService) GetMovieList(ctx context.Context, req *GetMovieListReq, rsp *GetMovieListRsp) error {
+// GetList mocks base method
+func (m *MockListService) GetList(ctx context.Context, req *GetListReq, rsp *GetListRsp) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetMovieList", ctx, req, rsp)
+	ret := m.ctrl.Call(m, "GetList", ctx, req, rsp)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// GetMovieList indicates an expected call of GetMovieList
-func (mr *MockMovieServiceMockRecorder) GetMovieList(ctx, req, rsp interface{}) *gomock.Call {
+// GetList indicates an expected call of GetList
+func (mr *MockListServiceMockRecorder) GetList(ctx, req, rsp interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMovieList", reflect.TypeOf((*MockMovieService)(nil).GetMovieList), ctx, req, rsp)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetList", reflect.TypeOf((*MockListService)(nil).GetList), ctx, req, rsp)
 }
 
 // MockUserClientProxy is a mock of UserClientProxy interface
@@ -196,45 +196,45 @@ func (mr *MockUserClientProxyMockRecorder) Login(ctx, req interface{}, opts ...i
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockUserClientProxy)(nil).Login), varargs...)
 }
 
-// MockMovieClientProxy is a mock of MovieClientProxy interface
-type MockMovieClientProxy struct {
+// MockListClientProxy is a mock of ListClientProxy interface
+type MockListClientProxy struct {
 	ctrl     *gomock.Controller
-	recorder *MockMovieClientProxyMockRecorder
+	recorder *MockListClientProxyMockRecorder
 }
 
-// MockMovieClientProxyMockRecorder is the mock recorder for MockMovieClientProxy
-type MockMovieClientProxyMockRecorder struct {
-	mock *MockMovieClientProxy
+// MockListClientProxyMockRecorder is the mock recorder for MockListClientProxy
+type MockListClientProxyMockRecorder struct {
+	mock *MockListClientProxy
 }
 
-// NewMockMovieClientProxy creates a new mock instance
-func NewMockMovieClientProxy(ctrl *gomock.Controller) *MockMovieClientProxy {
-	mock := &MockMovieClientProxy{ctrl: ctrl}
-	mock.recorder = &MockMovieClientProxyMockRecorder{mock}
+// NewMockListClientProxy creates a new mock instance
+func NewMockListClientProxy(ctrl *gomock.Controller) *MockListClientProxy {
+	mock := &MockListClientProxy{ctrl: ctrl}
+	mock.recorder = &MockListClientProxyMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use
-func (m *MockMovieClientProxy) EXPECT() *MockMovieClientProxyMockRecorder {
+func (m *MockListClientProxy) EXPECT() *MockListClientProxyMockRecorder {
 	return m.recorder
 }
 
-// GetMovieList mocks base method
-func (m *MockMovieClientProxy) GetMovieList(ctx context.Context, req *GetMovieListReq, opts ...client.Option) (*GetMovieListRsp, error) {
+// GetList mocks base method
+func (m *MockListClientProxy) GetList(ctx context.Context, req *GetListReq, opts ...client.Option) (*GetListRsp, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, req}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
-	ret := m.ctrl.Call(m, "GetMovieList", varargs...)
-	ret0, _ := ret[0].(*GetMovieListRsp)
+	ret := m.ctrl.Call(m, "GetList", varargs...)
+	ret0, _ := ret[0].(*GetListRsp)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetMovieList indicates an expected call of GetMovieList
-func (mr *MockMovieClientProxyMockRecorder) GetMovieList(ctx, req interface{}, opts ...interface{}) *gomock.Call {
+// GetList indicates an expected call of GetList
+func (mr *MockListClientProxyMockRecorder) GetList(ctx, req interface{}, opts ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{ctx, req}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMovieList", reflect.TypeOf((*MockMovieClientProxy)(nil).GetMovieList), varargs...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetList", reflect.TypeOf((*MockListClientProxy)(nil).GetList), varargs...)
 }
