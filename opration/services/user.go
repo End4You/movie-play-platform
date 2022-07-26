@@ -14,6 +14,13 @@ type UserImpl struct{}
 
 // Register 用户注册
 func (s *UserImpl) Register(ctx context.Context, req *pb.RegisterReq, rsp *pb.RegisterRsp) error {
+	// 正则校验用户名和密码
+	userNameResult := new(utils.Regexp).CheckUserName(req.UserName)
+	passwordResult := new(utils.Regexp).CheckPassword(req.Password)
+	if !(userNameResult && passwordResult) {
+		rsp.Code, rsp.Msg = config.ClientUPInvalid.Code, config.ClientUPInvalid.Msg
+		rsp.Result = false
+	}
 	// ConnDB 实例
 	db := utils.ConnDB()
 	// 创建用户前判断用户名是否存在
@@ -43,6 +50,12 @@ func (s *UserImpl) Register(ctx context.Context, req *pb.RegisterReq, rsp *pb.Re
 
 // CheckUserName 检查用户名重复
 func (s *UserImpl) CheckUserName(ctx context.Context, req *pb.CheckUserNameReq, rsp *pb.CheckUserNameRsp) error {
+	// 正则校验用户名
+	userNameResult := new(utils.Regexp).CheckUserName(req.UserName)
+	if !userNameResult {
+		rsp.Code, rsp.Msg = config.ClientUPInvalid.Code, config.ClientUPInvalid.Msg
+		rsp.Result = false
+	}
 	// ConnDB 实例
 	db := utils.ConnDB()
 	// 检查用户名重复逻辑
@@ -66,6 +79,12 @@ func (s *UserImpl) CheckUserName(ctx context.Context, req *pb.CheckUserNameReq, 
 
 // Login 用户登录
 func (s *UserImpl) Login(ctx context.Context, req *pb.LoginReq, rsp *pb.LoginRsp) error {
+	// 正则校验用户名和密码
+	userNameResult := new(utils.Regexp).CheckUserName(req.UserName)
+	passwordResult := new(utils.Regexp).CheckPassword(req.Password)
+	if !(userNameResult && passwordResult) {
+		rsp.Code, rsp.Msg = config.ClientUPInvalid.Code, config.ClientUPInvalid.Msg
+	}
 	// ConnDB 实例
 	db := utils.ConnDB()
 	// 检查密码正确性

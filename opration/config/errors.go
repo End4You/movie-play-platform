@@ -29,6 +29,7 @@ var (
 	ClientContentError       = Status{300, "客户端请求内容问题"}
 	ClientRecordNotFound     = Status{301, "记录未找到"}
 	ClientCheckUserNameError = Status{302, "用户名重复"}
+	ClientUPInvalid          = Status{304, "用户名或密码不规范"}
 	ClientLoginError         = Status{303, "登录失败"}
 	ClientInvalidTimeRange   = Status{320, "时间范围无效"}
 	ClientInvalidParamError  = Status{321, "客户端请求参数校验失败"}
