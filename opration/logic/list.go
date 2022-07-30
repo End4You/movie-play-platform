@@ -25,7 +25,7 @@ func GetListLogic(db *gorm.DB, data map[string]interface{}, role uint32, pageNo,
 	}
 	// 分页列表
 	listResult := db.Debug().Model(&models.List{}).Select(selectSQL).Where(whereSQL).
-		Offset(int(pageNo * pageSize)).Limit(int(pageSize)).Scan(&list)
+		Offset(int((pageNo - 1) * pageSize)).Limit(int(pageSize)).Scan(&list)
 	// 总量
 	countResult := db.Debug().Model(&models.List{}).Select(selectSQL).Where(whereSQL).Count(&count)
 	// 任意 db 读取错误，则返回错误

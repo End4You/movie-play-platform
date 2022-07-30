@@ -61,6 +61,8 @@ func SpliceWhereSql(data map[string]interface{}, role uint32) string {
 			whereConditions = append(whereConditions, strDB)
 		} else {
 			switch key {
+			case "pageNo", "pageSize":
+				continue
 			case "mName":
 				str, result := data[key].(string)
 				if result && str != "" {
@@ -69,7 +71,7 @@ func SpliceWhereSql(data map[string]interface{}, role uint32) string {
 			case "mDoubanScore":
 				num, result := data[key].(float64)
 				if result && num != 0 {
-					whereConditions = append(whereConditions, fmt.Sprintf("%s>='%v'", key, num))
+					whereConditions = append(whereConditions, fmt.Sprintf("%s>='%v'", key, uint32(num)))
 				}
 			default:
 				num, result := data[key].(float64)
