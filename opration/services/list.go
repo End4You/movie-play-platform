@@ -34,13 +34,16 @@ func (s *ListImpl) GetList(ctx context.Context, req *pb.GetListReq, rsp *pb.GetL
 		return nil
 	}
 	// 查询电影列表逻辑
-	result, err := logic.GetListLogic(db, mapData, role)
+	result, count, err := logic.GetListLogic(db, mapData, role, req.PageNo, req.PageSize)
 	if err != nil {
 		rsp.Code, rsp.Msg = config.InnerReadDbError.Code, config.InnerReadDbError.Msg
 		return nil
 	}
 	rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg
-	rsp.Result = result
+	rsp.Result = &pb.GetListRsp_Result{
+		List:  result,
+		Count: count,
+	}
 
 	return nil
 }

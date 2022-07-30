@@ -10,8 +10,9 @@ import (
 )
 
 // GetListLogic 获取电影列表
-func GetListLogic(db *gorm.DB, data map[string]interface{}, role uint32) ([]*pb.GetListRsp_Result, error) {
-	var list []*pb.GetListRsp_Result
+func GetListLogic(db *gorm.DB, data map[string]interface{}, role uint32, pageNo, pageSize int32) ([]*pb.GetListRsp_List, int64, error) {
+	var list []*pb.GetListRsp_List
+	var count int64
 	var selectSQL []string
 	// 获取 WHERE 条件
 	whereSQL := utils.SpliceWhereSql(data, role)
@@ -22,7 +23,15 @@ func GetListLogic(db *gorm.DB, data map[string]interface{}, role uint32) ([]*pb.
 		selectSQL = config.UserListFields
 		whereSQL += fmt.Sprintf(" AND mStatus = %d", 1)
 	}
-	result := db.Debug().Model(&models.List{}).Select(selectSQL).Where(whereSQL).Scan(&list)
-
-	return list, result.Error
+	// 分页列表
+	listResult := db.Debug().Model(&models.List{}).Select(selectSQL).Where(whereSQL).
+		Offset(int(pageNo * pageSize)).Limit(int(pageSize)).Scan(&list)
+	// 总量
+	countResult := db.Debug().Model(&models.List{}).Select(selectSQL).Where(whereSQL).Count(&count)
+	// 任意 db 读取错误，则返回错误
+	var dbError error
+	if listResult.Error != nil || countResult.Error != nil {
+		dbError = config.New(config.InnerReadDbError)
+	}
+	return list, count, dbError
 }

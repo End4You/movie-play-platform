@@ -48,6 +48,8 @@ message GetListReq {
   repeated uint32 mLanguageID  = 4; // 电影语言ID
   repeated uint32 mDateYearID  = 5; // 电影上映年份ID
   uint32          mDoubanScore = 6; // 豆瓣评分
+  int32           pageNo       = 7; // 页码
+  int32           pageSize     = 8; // 容量
 }
 
 /* 响应参数 */
@@ -78,7 +80,7 @@ message LoginRsp {
 
 // 获取视频列表 响应参数
 message GetListRsp {
-  message Result {
+  message List {
     uint32 mid           = 1; // 电影ID
     string mUrl          = 2; // 电影URL
     string mName         = 3; // 电影名
@@ -96,7 +98,11 @@ message GetListRsp {
     uint32 createTime    = 15; // 创建时间
     uint32 updateTime    = 16; // 更新时间
   }
+  message Result {
+    int64         count  = 1; // 总量
+    repeated List list   = 2; // 列表
+  }
   int32           code   = 1; // 返回码
   string          msg    = 2; // 返回信息
-  repeated Result result = 3; // 返回结果
+  Result          result = 3; // 返回结果
 }
