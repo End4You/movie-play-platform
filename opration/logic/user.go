@@ -67,23 +67,34 @@ func WriteTokenLogic(db *gorm.DB, userName, token string) error {
 }
 
 // PreHandleTokenLogic 检查 http 带来的 token 是否在数据库中
-func PreHandleTokenLogic(db *gorm.DB, ctx context.Context) (bool, error) {
+func PreHandleTokenLogic(db *gorm.DB, ctx context.Context) (bool, string, uint32, error) {
 	// 获取请求头中的 token
 	httpToken, err := utils.GetToken(ctx)
 	if err != nil {
-		return false, config.New(config.ClientNoTokenError)
+		return false, "", 1, config.New(config.ClientNoTokenError)
 	}
 	// 解密 token 中的 userName 字段
 	userName, err := utils.DecodeToken(httpToken, "userName")
 	if err != nil {
-		return false, config.New(config.ClientExtractTokenError)
+		return false, "", 1, config.New(config.ClientExtractTokenError)
 	}
-	// 获取数据库中该 userName 对应的 token
+	// 获取 token 数据表中该 userName 对应的 token
 	var token string
-	result := db.Debug().Model(&models.Token{}).
+	tokenResult := db.Debug().Model(&models.Token{}).
 		Select("token").
 		Where("userName = ?", userName).
 		First(&token)
+	// 获取 user 数据表中该 userName 对应的 role
+	var role uint32
+	roleResult := db.Debug().Model(&models.User{}).
+		Select("role").
+		Where("userName = ?", userName).
+		First(&role)
+	// 任意 db 读取错误，则返回错误
+	var dbError error
+	if tokenResult.Error != nil || roleResult.Error != nil {
+		dbError = config.New(config.InnerReadDbError)
+	}
 
-	return token == httpToken, result.Error
+	return token == httpToken, userName, role, dbError
 }

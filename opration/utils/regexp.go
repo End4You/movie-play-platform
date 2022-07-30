@@ -8,11 +8,19 @@ import (
 
 type Regexp struct{}
 
+// CheckLength 检查字符长度是否符合要求
+func (s *Regexp) CheckLength(string string, minLen, maxLen int) bool {
+	return utf8.RuneCountInString(string) >= minLen && utf8.RuneCountInString(string) <= maxLen
+}
+
 // CheckUserName 数字+字母 1~10 位
 func (s *Regexp) CheckUserName(string string) bool {
+	if !(s.CheckLength(string, 1, 10)) {
+		return false
+	}
 	stringSplit := strings.Split(string, "")
 	for _, str := range stringSplit {
-		result, err := regexp.MatchString("^[0-9a-zA-Z]{1,10}$", str)
+		result, err := regexp.MatchString("^[0-9a-zA-Z]$", str)
 		if !result || err != nil {
 			return false
 		}
@@ -22,9 +30,12 @@ func (s *Regexp) CheckUserName(string string) bool {
 
 // CheckPassword 数字+字母+特殊符号 4-32 位
 func (s *Regexp) CheckPassword(string string) bool {
+	if !(s.CheckLength(string, 4, 32)) {
+		return false
+	}
 	stringSplit := strings.Split(string, "")
 	for _, str := range stringSplit {
-		result, err := regexp.MatchString("^[0-9a-zA-Z~!@#$%^&*()_+={}|<>,.?;:]{4,32}$", str)
+		result, err := regexp.MatchString("^[0-9a-zA-Z~!@#$%^&*()_+={}|<>,.?;:]$", str)
 		if !result || err != nil {
 			return false
 		}
@@ -42,9 +53,4 @@ func (s *Regexp) CheckScore(string string) bool {
 		}
 	}
 	return true
-}
-
-// CheckLength 检查字符长度是否符合要求
-func (s *Regexp) CheckLength(string string, len int) bool {
-	return utf8.RuneCountInString(string) == len
 }

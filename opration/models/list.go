@@ -1,0 +1,50 @@
+package models
+
+type List struct {
+	// 电影ID，自增ID
+	Mid uint32
+	// 电影URL
+	MURL string
+	// 电影名
+	MName string
+	// 电影海报
+	MPoster string
+	// 电影类型ID
+	MTypeID int8
+	// 电影类型
+	MTypeName string
+	// 豆瓣评分
+	MDoubanScore float32
+	// 电影导演
+	MDirector string
+	// 电影主演
+	MStarring string
+	// 电影制片国家/地区ID
+	MCountryID uint32
+	// 电影制片国家/地区
+	MCountryName string
+	// 电影语言ID
+	MLanguageID uint32
+	// 电影语言
+	MLanguageName string
+	// 电影上映年份ID
+	MDateYearID uint32
+	// 电影上映年份
+	MDateYearName string
+	// 电影上映日期
+	MDate string
+	// 电影简介
+	MDesc string
+	// 电影播放量
+	MViews uint32
+	// 电影点赞量
+	MLikes uint32
+	// 电影收藏量
+	MCollects uint32
+	// 电影状态
+	MStatus uint32
+	// 创建时间
+	CreateTime uint64
+	// 更新时间
+	UpdateTime uint64
+}

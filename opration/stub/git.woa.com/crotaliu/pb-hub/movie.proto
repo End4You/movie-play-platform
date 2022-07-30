@@ -42,36 +42,61 @@ message LoginReq {
 
 // 获取视频列表 请求参数
 message GetListReq {
-  int32 status = 1; // 视频状态: 0-所有 1-上线 2-下线
+  string          mName        = 1; // 电影名
+  repeated uint32 mTypeID      = 2; // 电影类型ID
+  repeated uint32 mCountryID   = 3; // 电影制片国家/地区ID
+  repeated uint32 mLanguageID  = 4; // 电影语言ID
+  repeated uint32 mDateYearID  = 5; // 电影上映年份ID
+  uint32          mDoubanScore = 6; // 豆瓣评分
 }
 
 /* 响应参数 */
 // 用户注册 响应参数
 message RegisterRsp {
-  int32   code   = 1;  // 返回码
-  string  msg    = 2;  // 返回信息
-  bool    result = 3;  // 返回结果，false-登录失败 true-登录成功
+  int32  code   = 1; // 返回码
+  string msg    = 2; // 返回信息
+  bool   result = 3; // 返回结果，false-登录失败 true-登录成功
 }
 
 // 检查用户名重复 响应参数
 message CheckUserNameRsp {
-  int32   code   = 1;  // 返回码
-  string  msg    = 2;  // 返回信息
-  bool    result = 3;  // 返回结果，false-不重复 true-重复
+  int32  code   = 1; // 返回码
+  string msg    = 2; // 返回信息
+  bool   result = 3; // 返回结果，false-不重复 true-重复
 }
 
 // 用户登录 响应参数
 message LoginRsp {
   message Result {
-    string token      = 1; // 用户 token
-    int64 loginTime  = 2; // 登录时间
+    string token     = 1; // 用户 token
+    int64  loginTime = 2; // 登录时间
   }
-  int32   code   = 1;  // 返回码
-  string  msg    = 2;  // 返回信息
-  Result  result = 3;  // 返回结果
+  int32       code   = 1; // 返回码
+  string      msg    = 2; // 返回信息
+  Result      result = 3; // 返回结果
 }
 
 // 获取视频列表 响应参数
 message GetListRsp {
-  int32 status = 1;
+  message Result {
+    uint32 mid           = 1; // 电影ID
+    string mUrl          = 2; // 电影URL
+    string mName         = 3; // 电影名
+    string mPoster       = 4; // 电影海报
+    string mTypeName     = 5; // 电影类型
+    string mDoubanScore  = 6; // 豆瓣评分
+    string mDirector     = 7; // 电影导演
+    string mStarring     = 8; // 电影主演
+    string mCountryName  = 9; // 电影制片国家/地区
+    string mLanguageName = 10; // 电影语言
+    uint32 mDate         = 11; // 电影上映日期
+    uint32 mViews        = 12; // 电影播放量
+    uint32 mLikes        = 13; // 电影点赞量
+    uint32 mCollects     = 14; // 电影收藏量
+    uint32 createTime    = 15; // 创建时间
+    uint32 updateTime    = 16; // 更新时间
+  }
+  int32           code   = 1; // 返回码
+  string          msg    = 2; // 返回信息
+  repeated Result result = 3; // 返回结果
 }

@@ -20,6 +20,7 @@ func (s *UserImpl) Register(ctx context.Context, req *pb.RegisterReq, rsp *pb.Re
 	if !(userNameResult && passwordResult) {
 		rsp.Code, rsp.Msg = config.ClientUPInvalid.Code, config.ClientUPInvalid.Msg
 		rsp.Result = false
+		return nil
 	}
 	// ConnDB 实例
 	db := utils.ConnDB()
@@ -55,6 +56,7 @@ func (s *UserImpl) CheckUserName(ctx context.Context, req *pb.CheckUserNameReq, 
 	if !userNameResult {
 		rsp.Code, rsp.Msg = config.ClientUPInvalid.Code, config.ClientUPInvalid.Msg
 		rsp.Result = false
+		return nil
 	}
 	// ConnDB 实例
 	db := utils.ConnDB()
@@ -65,6 +67,7 @@ func (s *UserImpl) CheckUserName(ctx context.Context, req *pb.CheckUserNameReq, 
 		log.Errorf("CheckUserNameLogic 检查用户名重复事件失败：%v", err)
 		rsp.Code, rsp.Msg = config.InnerReadDbError.Code, config.InnerReadDbError.Msg
 		rsp.Result = result
+		return nil
 	}
 	// 正常返回
 	if result {
@@ -84,6 +87,7 @@ func (s *UserImpl) Login(ctx context.Context, req *pb.LoginReq, rsp *pb.LoginRsp
 	passwordResult := new(utils.Regexp).CheckPassword(req.Password)
 	if !(userNameResult && passwordResult) {
 		rsp.Code, rsp.Msg = config.ClientUPInvalid.Code, config.ClientUPInvalid.Msg
+		return nil
 	}
 	// ConnDB 实例
 	db := utils.ConnDB()
@@ -92,6 +96,7 @@ func (s *UserImpl) Login(ctx context.Context, req *pb.LoginReq, rsp *pb.LoginRsp
 	if err != nil {
 		log.Errorf("CheckPasswordLogic 检查密码正确性事件失败：%v", err)
 		rsp.Code, rsp.Msg = config.InnerReadDbError.Code, config.InnerReadDbError.Msg
+		return nil
 	}
 	if result { // 密码正确
 		// 生成 token
@@ -101,12 +106,14 @@ func (s *UserImpl) Login(ctx context.Context, req *pb.LoginReq, rsp *pb.LoginRsp
 		if err != nil {
 			log.Errorf("DeleteTokenLogic 删除旧 token 事件失败：%v", err)
 			rsp.Code, rsp.Msg = config.InnerDeleteDbError.Code, config.InnerDeleteDbError.Msg
+			return nil
 		}
 		// 写入新 token
 		err = logic.WriteTokenLogic(db, req.UserName, token)
 		if err != nil {
 			log.Errorf("WriteTokenLogic 写入新 token 事件失败：%v", err)
 			rsp.Code, rsp.Msg = config.InnerWriteDbError.Code, config.InnerWriteDbError.Msg
+			return nil
 		}
 		// 正常返回
 		rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg
