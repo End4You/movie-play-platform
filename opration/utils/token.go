@@ -58,7 +58,8 @@ func DecodeToken(token string, key string) (string, error) {
 			}
 			tokenMap[tokenItemSplice[0]] = tokenItemSplice[1]
 		}
+		return tokenMap[key], nil
 	}
 
-	return tokenMap[key], nil
+	return "", config.New(config.ClientExtractTokenError)
 }

@@ -17,7 +17,7 @@ func GetListLogic(db *gorm.DB, data map[string]interface{}, role uint32, pageNo,
 	// 获取 WHERE 条件
 	whereSQL := utils.SpliceWhereSql(data, role)
 	// 不同角色 SELECT 字段不同
-	if role == uint32(2) {
+	if role == uint32(3) {
 		selectSQL = config.AdminListFields
 	} else {
 		selectSQL = config.UserListFields
